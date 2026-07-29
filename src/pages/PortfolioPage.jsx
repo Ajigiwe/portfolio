@@ -87,7 +87,7 @@ function TiltCard({ children, style }) {
 function Section({ id, title, theme, children, noDivider }) {
   const ref = useReveal();
   return (
-    <section id={id} ref={ref} className="vp-reveal" style={{ padding: "100px 0", position: "relative" }}>
+    <section id={id} ref={ref} className="vp-reveal" style={{ padding: "100px 0", position: "relative", overflow: "hidden" }}>
       <div className="vp-section-orb" style={{ width: 400, height: 400, top: -100, right: -100, background: `radial-gradient(circle, ${theme.green}08, transparent)` }} />
       <div className="vp-section-orb" style={{ width: 300, height: 300, bottom: -80, left: -80, background: "radial-gradient(circle, rgba(0,212,255,0.06), transparent)", animationDelay: "-3s" }} />
       <div style={{ position: "relative", zIndex: 1 }}>
