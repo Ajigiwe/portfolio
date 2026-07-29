@@ -41,17 +41,20 @@ export default function SnakeGame({ onExit }) {
     setDead(false);
   };
 
+  const setDirSafe = useCallback((nd) => {
+    const cur = dirRef.current;
+    if (!nd || (nd[0] === -cur[0] && nd[1] === -cur[1])) return;
+    setDir(nd);
+  }, []);
+
   const handleKey = useCallback((e) => {
     if (e.key === "Escape" || e.key === "q") { onExit(); return; }
     if (e.key === "r" && deadRef.current) { reset(); return; }
-    const k = e.key;
-    const nd = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0], w: [0, -1], s: [0, 1], a: [-1, 0], d: [1, 0] }[k];
+    const nd = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0], w: [0, -1], s: [0, 1], a: [-1, 0], d: [1, 0] }[e.key];
     if (!nd) return;
     e.preventDefault();
-    const cur = dirRef.current;
-    if (nd[0] === -cur[0] && nd[1] === -cur[1]) return;
-    setDir(nd);
-  }, [onExit]);
+    setDirSafe(nd);
+  }, [onExit, setDirSafe]);
 
   useEffect(() => {
     document.addEventListener("keydown", handleKey);
@@ -114,6 +117,17 @@ export default function SnakeGame({ onExit }) {
           </div>
         )}
         <div className="snake-hint">Arrow keys/WASD to move · Esc/q to exit</div>
+        <div className="game-controls show">
+          <div className="game-dpad">
+            <button className="game-btn" onPointerDown={(e) => { e.preventDefault(); setDirSafe([0, -1]); }}>&#9650;</button>
+            <button className="game-btn" onPointerDown={(e) => { e.preventDefault(); setDirSafe([-1, 0]); }}>&#9664;</button>
+            <button className="game-btn" onPointerDown={(e) => { e.preventDefault(); setDirSafe([0, 1]); }}>&#9660;</button>
+            <button className="game-btn" onPointerDown={(e) => { e.preventDefault(); setDirSafe([1, 0]); }}>&#9654;</button>
+          </div>
+          {dead && (
+            <button className="game-btn game-btn-wide" onClick={reset}>Restart</button>
+          )}
+        </div>
       </div>
     </div>
   );
